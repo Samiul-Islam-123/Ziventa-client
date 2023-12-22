@@ -19,6 +19,10 @@ import OTPVerification from '../../Auth/OTPVerification';
 import Products from '../../Public/Products/Products';
 import Profile from '../../Private/Profile/Profile';
 import OwnerID from '../../OwnerID';
+import ProductDetails from '../../Private/ProductDetails/ProductDetails';
+import Cart from '../../Private/Cart/Cart';
+import {checkAuthentication} from "./auth"
+import Success from '../../Private/Success';
 
 function NavBar() {
     const [mobo, setMobo] = useState(window.innerWidth <= 700);
@@ -50,8 +54,17 @@ function NavBar() {
                         <Route exact path="/signup" element={<div ><Signup /></div>}></Route>
                         <Route exact path="/password-reset/verification" element={<div ><PasswordResetVerification /></div>}></Route>
                         <Route exact path="/password-reset" element={<div ><PasswordReset /></div>}></Route>
+                        <Route exact path="/otp-verification/:email" element={<div ><OTPVerification /></div>}></Route>
 
                         <Route exact path="/products" element={<Products />}></Route>
+                        <Route exact path="/products/details/:ProductID" element={<ProductDetails checkAuthentication = {checkAuthentication}/>}></Route>
+<Route exact path='/success' element={<Success />}></Route>
+
+                        <Route exact path="/profile" element={<Profile checkAuthentication = {checkAuthentication}/>}></Route>
+
+                        <Route exact path='/cart' element={<Cart checkAuthentication = {checkAuthentication}/>}></Route>
+
+                   
                     </Routes>
 
                 </div>
@@ -79,8 +92,13 @@ function NavBar() {
                         <Route exact path="/otp-verification/:email" element={<div ><OTPVerification /></div>}></Route>
 
                         <Route exact path="/products" element={<Products />}></Route>
+                        <Route exact path="/products/filter/:filterValue" element={<Products />}></Route>
+                        
+                        <Route exact path="/products/details/:ProductID" element={<ProductDetails checkAuthentication = {checkAuthentication}/>}></Route>
 
-                        <Route exact path="/profile" element={<Profile />}></Route>
+                        <Route exact path="/profile" element={<Profile checkAuthentication = {checkAuthentication}/>}></Route>
+<Route exact path='/success' element={<Success />}></Route>
+                        <Route exact path='/cart' element={<Cart checkAuthentication = {checkAuthentication}/>}></Route>
 
                     </Routes>
                 </div>

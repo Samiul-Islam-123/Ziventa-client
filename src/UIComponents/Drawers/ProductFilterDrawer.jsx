@@ -88,7 +88,7 @@ export default function ProductFilterDrawer({ children }) {
 
                 <ListItem disablePadding >
                     <ListItemButton onClick={() => {
-                        navigate('/app/workwise/freelancer/feed')
+                        navigate('/products/filter/men')
                     }}>
                         <ListItemIcon>
                             <FcBusinessman />
@@ -101,7 +101,8 @@ export default function ProductFilterDrawer({ children }) {
 
                 <ListItem disablePadding >
                     <ListItemButton onClick={() => {
-                        navigate('/app/workwise/freelancer/proposal')
+                                                navigate('/products/filter/women')
+
                     }}>
                         <ListItemIcon>
                             <Badge badgeContent={orders} color="primary">
@@ -114,7 +115,8 @@ export default function ProductFilterDrawer({ children }) {
 
                 <ListItem disablePadding >
                     <ListItemButton onClick={() => {
-                        navigate('/app/ecommerce/buyer/cart')
+                                                navigate('/products/filter/kids')
+
                     }}>
                         <ListItemIcon>
                             <Badge badgeContent={cartProducts} color="primary">
@@ -128,40 +130,7 @@ export default function ProductFilterDrawer({ children }) {
 
                 <Divider />
 
-                <Typography variant="h6" align="center">
-                    Sort By
-                </Typography>
-                <Divider />
-
-                <ListItem disablePadding >
-                    <Typography flexGrow={"0.8"} variant="h7" align="center">
-                        Ratings
-                    </Typography>
-
-                    <IconButton>
-                        <ArrowCircleUpIcon />
-                    </IconButton>
-
-                    <IconButton>
-                        <ArrowCircleDownIcon />
-                    </IconButton>
-                </ListItem>
-
-
-
-                <ListItem disablePadding >
-                    <Typography flexGrow={"0.8"} variant="h7" align="center">
-                        Price
-                    </Typography>
-
-                    <IconButton>
-                        <ArrowCircleUpIcon />
-                    </IconButton>
-
-                    <IconButton>
-                        <ArrowCircleDownIcon />
-                    </IconButton>
-                </ListItem>
+               
 
             </List>
         </Box>

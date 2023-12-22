@@ -33,7 +33,7 @@ function BottomNav() {
                     <GiClothes />
                 </div>} />
                 <BottomNavigationAction label="Cart" icon={<ShoppingCartIcon />} onClick={() => {
-                    navigate('/my-cart')
+                    navigate('/cart')
                 }} />
                 <BottomNavigationAction label="Profile" icon={<AccountCircleIcon />} onClick={() => {
                     navigate('/profile')

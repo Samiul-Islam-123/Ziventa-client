@@ -1,65 +1,110 @@
-import { AppBar, Button, IconButton, Icon, TextField, Toolbar, Typography } from '@mui/material'
-import React from 'react';
-import { Search } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import {
+  AppBar,
+  Button,
+  IconButton,
+  Icon,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Search } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import axios from "axios";
+import apiURL from "../../apiURL";
+import Cookies from "js-cookie";
+import Badge from "@mui/material/Badge";
 
 function DesktopNavBar() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [CartItems, setCartItems] = useState(0);
 
-    return (
-        <>
-            <AppBar>
-                <Toolbar>
-                    <Typography variant='h3'>
-                        ZA
-                    </Typography>
+  const fetchData = async () => {
+    const token = Cookies.get("access_token");
+    const res = await axios.get(`${apiURL}/app/client/badge-values/${token}`);
+    console.log(res)
+    if (res.data.message == "OK") {
+      setCartItems(res.data.CartItems);
+    
+    } else {
+      alert("Error on badge fetching");
+      console.log(res.data);
+    }
+  };
 
-                    <TextField
-                        onChange={() => {
-                            navigate('/products')
-                        }}
-                        style={{
-                            marginLeft: "10px",
-                            flexGrow: "1"
-                        }} variant='outlined' label="Search Products" fullWidth />
+  useEffect(() => {
+    //fetchData();
+  }, []);
 
+  return (
+    <>
+      <AppBar>
+        <Toolbar>
+          <Typography variant="h3">ZA</Typography>
 
-                    <Button color='inherit' onClick={() => {
-                        navigate('/');
-                    }}>
-                        Home
-                    </Button>
+          <TextField
+            onChange={(e) => {
+              if(e.target.value != "")
+              navigate("/products/filter/"+e.target.value);
+            else
+            navigate("/products/filter/none");
 
-                    <Button color='inherit' onClick={() => {
-                        navigate('/products')
-                    }}>
-                        Products
-                    </Button>
+            }}
+            style={{
+              marginLeft: "10px",
+              flexGrow: "1",
+            }}
+            variant="outlined"
+            label="Search Products"
+            fullWidth
+          />
 
-                    <IconButton onClick={() => {
-                        navigate('/cart')
-                    }}>
-                        <Icon>
-                            <ShoppingCartIcon />
-                        </Icon>
-                    </IconButton>
+          <Button
+            color="inherit"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Home
+          </Button>
 
-                    <IconButton onClick={() => {
-                        navigate('/profile')
-                    }}>
-                        <Icon>
-                            <AccountCircleIcon />
-                        </Icon>
-                    </IconButton>
+          <Button
+            color="inherit"
+            onClick={() => {
+              navigate("/products");
+            }}
+          >
+            Products
+          </Button>
 
-                </Toolbar>
-            </AppBar>
-        </>
-    )
+          <Badge  color="primary">
+            <IconButton
+              onClick={() => {
+                navigate("/cart");
+              }}
+            >
+              <Icon>
+                <ShoppingCartIcon />
+              </Icon>
+            </IconButton>
+          </Badge>
+
+          <IconButton
+            onClick={() => {
+              navigate("/profile");
+            }}
+          >
+            <Icon>
+              <AccountCircleIcon />
+            </Icon>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+    </>
+  );
 }
 
-export default DesktopNavBar
+export default DesktopNavBar;

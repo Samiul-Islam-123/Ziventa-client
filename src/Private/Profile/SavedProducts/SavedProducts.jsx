@@ -11,16 +11,7 @@ function SavedProducts() {
             <Grid container spacing={2}>
 
                 {
-                    TestProfileData.savedProducts.map(item => {
-                        return (<>
-                            <GridView
-                                ProductDescription={item.ProductDescription}
-                                ProductImageURL={item.ProductImageURL}
-                                ProductTitle={item.ProductTitle}
-                                ProductPrice={item.ProductPrice}
-                            />
-                        </>)
-                    })
+                    
                 }
             </Grid>
         </>
