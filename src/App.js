@@ -7,7 +7,13 @@ import Owner from "./Owner/Owner";
 
 const theme = createTheme({
   palette: {
-    mode: "dark", // Set the dark mode in the palette
+    mode: "dark", 
+    primary : {
+      main : '#333333'
+    },
+    secondary : {
+      main : "#FFD700"
+    }
   },
 });
 
@@ -17,6 +23,7 @@ function App() {
       <CssBaseline />
 
       <NavBar />
+
 
 
 

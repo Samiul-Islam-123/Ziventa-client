@@ -24,16 +24,19 @@ import Cookies from "js-cookie";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useParams } from "react-router-dom";
-import { ConstructionOutlined } from "@mui/icons-material";
+import { ConnectingAirportsOutlined, ConstructionOutlined } from "@mui/icons-material";
+import ProductCard from "./ProductCard";
 
 function Products() {
+  const { category } = useParams();
   const [productsData, setProducts] = useState([]);
   const [listView, SetListView] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
 
   const [selectedAge, setSelectedAge] = useState(null); // or set an initial value if needed
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
-  const [filteredProducts, setFilteredProducts] = useState(null)
+  const [filteredProducts, setFilteredProducts] = useState(null);
 
   const handleAgeChange = (event, value) => {
     setSelectedAge(value);
@@ -61,10 +64,17 @@ function Products() {
     { label: "Over ₹5,000", value: "5000+" },
   ];
 
+  useEffect(() => {
+    fetchProducts();
+  }, [category]);
+
   const fetchProducts = async () => {
-    setLoading(true);
+    setLoading(true)
     const token = Cookies.get("access_token");
-    const response = await axios.get(`${apiURL}/app/client/all-products`);
+    const response = await axios.get(
+      `${apiURL}/app/client/products/${category}`
+    );
+    //console.log(response);
     if (response.data.message == "OK") setProducts(response.data.products);
     else {
       alert(response.data.message);
@@ -72,10 +82,6 @@ function Products() {
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   useEffect(() => {
     if (filterValue) SearchProducts();
@@ -86,7 +92,9 @@ function Products() {
     productsData.forEach((item) => {
       if (
         item.ProductTitle.toLowerCase().includes(filterValue.toLowerCase()) ||
-        item.ProductDescription.toLowerCase().includes(filterValue.toLowerCase()) ||
+        item.ProductDescription.toLowerCase().includes(
+          filterValue.toLowerCase()
+        ) ||
         (item.Category && item.Category.includes(filterValue))
       ) {
         output.push(item);
@@ -94,7 +102,6 @@ function Products() {
     });
     setFilteredProducts(output);
   };
-  
 
   useEffect(() => {
     filterProducts(selectedAge, selectedPriceRange);
@@ -126,9 +133,10 @@ function Products() {
       const isAgeMatch = selectedAge ? metaData.AgeRange === selectedAge : true;
 
       // Check if the PriceRange matches the selected price range
-     // Check if the PriceRange matches the selected price range
-    const isPriceMatch =
-    selectedPriceRange ? isPriceInRange(selectedPriceRange.value, productPrice) : true;
+      // Check if the PriceRange matches the selected price range
+      const isPriceMatch = selectedPriceRange
+        ? isPriceInRange(selectedPriceRange.value, productPrice)
+        : true;
 
       // Return true only if both AgeRange and PriceRange match the selected values
       return isAgeMatch && isPriceMatch;
@@ -137,201 +145,152 @@ function Products() {
     setFilteredProducts(filteredProducts);
   };
 
-  return (
+  const FilterOptions = [
+    {label : "Price : High > Low", option : 1},
+    {label : "Price : Low < High", option : 2},
+    {label : "High Rating First", option : 3},
+    {label : "Recent", option : 4},
+  ];
+
+  const handlefilterChange = async(event, selectedFilter)=>{
+    if(selectedFilter){
+      setLoading(true)
+      var filterResponse = null;
+      console.log(selectedFilter.option);
+      switch(selectedFilter.option){
+      case 1 :
+        filterResponse = await axios.get(
+          `${apiURL}/app/client/${category}/filter/price/high-low`
+          );
+          break;
+
+          case 2 :
+            //console.log(`${apiURL}/app/client/filter/price/hight-low`)
+            filterResponse = await axios.get(
+            `${apiURL}/app/client/${category}/filter/price/low-high`
+          );
+          break;
+          
+          case 3 :
+            filterResponse = await axios.get(
+              `${apiURL}/app/client/${category}/filter/rating-first`
+              );
+        break;
+        
+        case 4 :
+          filterResponse = await axios.get(
+          `${apiURL}/app/client/${category}/filter/recent-first`
+          );
+          break;
+          
+          default :
+          alert("invalid filter selected :(");
+          break;
+          
+        }
+        
+        console.log(filterResponse)
+        if(filterResponse.data.message === "OK")
+        setProducts(filterResponse.data.products);
+
+      else
+      {
+        console.log(filterResponse);
+        alert(filterResponse.data.message)
+      }
+      setLoading(false);
+    }
+    }
+
+    const handleSearchQuery = async(e)=>{
+      const query = e.target.value;
+      setStatus("")
+      if(query){
+        setLoading(true);
+        const SearchResponse = await axios.get(`${apiURL}/app/client/search/${query}`);
+        if(SearchResponse.data.message === "OK")
+        setProducts(SearchResponse.data.products);
+        if(SearchResponse.data.message === "error")
+        {
+          alert("ERROR :(")
+        }
+        if(SearchResponse.data.message === "No products found :(")
+        {
+          setStatus(SearchResponse.data.message)
+        }
+
+      setLoading(false)
+      }
+      else{
+       await fetchProducts();
+      }
+    }
+    
+    return (
     <>
       <Container>
-        <Toolbar
-          style={{
-            marginTop: "75px",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            zIndex: 100,
-            backgroundColor: "#263238",
-            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Customize the shadow if desired
-          }}
-        >
-          {/*Categorie */}
-          <ProductFilterDrawer>
-            <IconButton>
-              <TuneIcon />
-            </IconButton>
-          </ProductFilterDrawer>
-
-          {/*Age */}
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            options={ageRange}
-            onChange={handleAgeChange}
-            sx={{ width: 200 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Age Range" />
-            )}
-          />
-
-          {/*Price */}
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            options={priceRange}
-            onChange={handlePriceChange}
-            getOptionLabel={(option) => option.label} // Display the label in the input field
-            sx={{ width: 200 }}
-            renderInput={(params) => (
-              <>
-                <TextField {...params} label="Price Range" />
-                <Divider />
-              </>
-            )}
-          />
-
-          {!listView ? (
-            <>
-              <IconButton
-                style={{
-                  marginLeft: "auto",
-                }}
-                onClick={() => {
-                  SetListView(!listView);
-                }}
-              >
-                <ViewListIcon />
-              </IconButton>
-            </>
-          ) : (
-            <>
-              <IconButton
-                style={{
-                  marginLeft: "auto",
-                }}
-                onClick={() => {
-                  SetListView(!listView);
-                }}
-              >
-                <GridOnIcon />
-              </IconButton>
-            </>
-          )}
-        </Toolbar>
+        {loading ? (
+          <>
+            <Backdrop
+              sx={{
+                color: "#fff",
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+              }}
+              open={loading}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          </>
+        ) : null}
 
         <div
           style={{
-            marginTop: "150px",
+            display: "flex",
           }}
         >
-          {loading ? (
-            <>
-              <Backdrop
-                sx={{
-                  color: "#fff",
-                  zIndex: (theme) => theme.zIndex.drawer + 1,
-                }}
-                open={loading}
-              >
-                <CircularProgress color="inherit" />
-              </Backdrop>
-            </>
-          ) : null}
-
-
-
-          {listView ? (
-            <>
-
-{filteredProducts && (
-  <>
-    {filteredProducts.map((item) => {
-                //console.log(item)
-                return (
-                  <>
-                    <ListView
-                      productID={item._id}
-                      ProductImageURL={item.ProductImages[0]}
-                      ProductTitle={item.ProductTitle}
-                      ProductDescription={item.ProductDescription}
-                      ProductPrice={item.ProductPrice}
-                      ProductID={item._id}
-                    />
-                  </>
-                );
-              })}
-  </>
-)}
-
-<Divider style={{
-  marginTop : "80px", 
-  marginBottom : "80px"
-}}/>
-
-              {productsData.map((item) => {
-                //console.log(item)
-                return (
-                  <>
-                    <ListView
-                      productID={item._id}
-                      ProductImageURL={item.ProductImages[0]}
-                      ProductTitle={item.ProductTitle}
-                      ProductDescription={item.ProductDescription}
-                      ProductPrice={item.ProductPrice}
-                      ProductID={item._id}
-                    />
-                  </>
-                );
-              })}
-            </>
-          ) : (
-            <>
-
-{filteredProducts && (
-  <>
-    <Grid container spacing={2} style={{ display: "flex", flexWrap: "wrap" }}>
-      {filteredProducts.map((item) => {
-        return (
-          <>
-            <GridView
-              ProductImages={item.ProductImages}
-              ProductTitle={item.ProductTitle}
-              ProductDescription={item.ProductDescription}
-              ProductPrice={item.ProductPrice}
-              ProductID={item._id}
-            />
-          </>
-        );
-      })}
-    </Grid>
-  </>
-)}
-
-<Divider style={{
-  marginTop : "80px", 
-  marginBottom : "80px"
-}}/>
-
-
-              <Grid
-                container
-                spacing={2}
-                style={{ display: "flex", flexWrap: "wrap" }}
-              >
-                {productsData.map((item) => {
-                  return (
-                    <>
-                      <GridView
-                        ProductImages={item.ProductImages}
-                        ProductTitle={item.ProductTitle}
-                        ProductDescription={item.ProductDescription}
-                        ProductPrice={item.ProductPrice}
-                        ProductID={item._id}
-                      />
-                    </>
-                  );
-                })}
-              </Grid>
-            </>
-          )}
+          <TextField onChange={handleSearchQuery} variant="outlined" label="Search Title, Category or Description" fullWidth />
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={FilterOptions}
+            onChange={handlefilterChange}
+            sx={{ width: 200 }}
+            renderInput={(params) => <TextField {...params} label="Filter" />}
+          />
         </div>
+
+        {status!="" ? (<>
+          {status}
+        </>) : null}
+
+        <Typography
+          variant="h3"
+          style={{
+            marginTop: "40px",
+            marginBottom: "40px",
+          }}
+        >
+          {category}'s Wear
+        </Typography>
+
+        <Grid container spacing={2}>
+          {productsData.map((item) => {
+            return (
+              <>
+                <Grid item xs={12} md={4}>
+                  <ProductCard
+                    imageURL={item.ProductImages[0]}
+                    imagwWidth="300px"
+                    imageHeight="400px"
+                    ProductTitle={item.ProductTitle}
+                    ProductPrice={item.ProductPrice}
+                    _id = {item._id}
+                  />
+                </Grid>
+              </>
+            );
+          })}
+        </Grid>
       </Container>
     </>
   );
