@@ -1,54 +1,81 @@
-import { AppBar, Divider, Icon, IconButton, TextField, Toolbar, Typography } from '@mui/material'
-import React from 'react'
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import {
+  AppBar,
+  Button,
+  IconButton,
+  Icon,
+  Toolbar,
+  Typography,
+  Badge,
+  TextField,
+} from "@mui/material";
+import { Search } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import SearchIcon from "@mui/icons-material/Search";
+import axios from "axios";
+import apiURL from "../../apiURL";
+import Cookies from "js-cookie";
+import TuneIcon from "@mui/icons-material/Tune";
+import MobileControllerDrawer from "../Drawers/MobileControllerDrawer";
 
 function MobileNavBar() {
+  const navigate = useNavigate();
 
-    const [value, setValue] = React.useState(0);
-    const navigate = useNavigate();
+  const [CartItems, setCartItems] = useState(0);
 
-    return (
-        <>
-            <AppBar position='fixed'>
+  const fetchData = async () => {
+    const token = Cookies.get("access_token");
+    const res = await axios.get(`${apiURL}/app/client/badge-values/${token}`);
+    console.log(res);
+    if (res.data.message === "OK") {
+      setCartItems(res.data.CartItems);
+    } else {
+      alert("Error on badge fetching");
+      console.log(res.data);
+    }
+  };
 
-                <Toolbar style={{
+  useEffect(() => {
+    // fetchData();
+  }, []);
 
-                    marginTop: "10px"
-                }}>
-                    <Typography variant='h4'>
-                        ZA
-                    </Typography>
+  return (
+    <>
+      <Toolbar style={{ justifyContent: "center" , position: "fixed",
+          width: "100%",
+          top: 0,
+          zIndex: 1000,
+          marginBottom: "100px",}}>
+        <MobileControllerDrawer>
+          <IconButton>
+            <Icon>
+              <TuneIcon />
+            </Icon>
+          </IconButton>
+        </MobileControllerDrawer>
 
-                    <TextField
-                        onChange={() => {
-                            navigate('/products')
-                        }}
-                        style={{
-                            marginLeft: "10px",
-                            flexGrow: "1"
-                        }} variant='outlined' label="Search Products" fullWidth />
+        <Typography variant="h4" style={{ flexGrow: 1, textAlign: "center" }} onClick={()=>{navigate('/')}}>
+          ZIVENTA
+        </Typography>
 
-                    <IconButton>
-                        <Icon>
-                            <NotificationsIcon />
-                        </Icon>
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
+        <IconButton onClick={() => navigate("/cart")}>
+                <Icon>
+                  <ShoppingCartIcon />
+                </Icon>
+              </IconButton>
+          
 
-            <Divider color='white' style={{
-                marginTop: "10px"
-            }} />
-
-
-        </>
-    )
+            <IconButton onClick={() => navigate("/profile")}>
+              <Icon>
+                <AccountCircleIcon />
+              </Icon>
+            </IconButton>
+      </Toolbar>
+      <div style={{ marginBottom: "60px" }}></div>
+    </>
+  );
 }
 
-export default MobileNavBar
+export default MobileNavBar;

@@ -24,6 +24,7 @@ import { loadStripe } from "@stripe/stripe-js";
 function Cart(props) {
   const navigate = useNavigate();
 
+
   const [CartData, setCartData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [productQuantities, setProductQuantities] = useState({});
@@ -102,7 +103,8 @@ function Cart(props) {
       OrderPrice: totalProductPrice,
       products: products,
     });
-    if (res.data.message == "OK") navigate("/profile");
+    //if (res.data.message == "OK") navigate("/profile");
+
 
     setLoading(false);
   };

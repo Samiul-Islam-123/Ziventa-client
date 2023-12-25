@@ -1,169 +1,115 @@
-import { Button, Container, Grid, Typography } from '@mui/material';
-import React from 'react';
-import first from "../../Assets/first.png";
-import second from "../../Assets/second.png"
-import third from "../../Assets/third.png";
-import fourth from "../../Assets/fourth.png";
-import fifth from "../../Assets/fifth.png";
-import sixth from "../../Assets/sixth.png";
-import { useNavigate } from 'react-router-dom';
-
+import React from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Button, Container, Divider, Grid, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { first } from "./../../Assets/first.png";
+import ProductCard from "../Products/ProductCard";
+import Footer from "./Footer";
 
 function DesktopLandingPage() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  // Sample images for the carousel
+  const images = [
+    "https://t3.ftcdn.net/jpg/06/21/88/34/240_F_621883464_mZCmCAqaBgcV3bLwoaKx3eyrB4gjJ02M.jpg",
+    "https://t4.ftcdn.net/jpg/06/22/23/65/240_F_622236596_41vDy4OkN5dIsd8Mkic0jYwgcQJPkG5R.jpg",
+    "https://t3.ftcdn.net/jpg/06/16/71/88/240_F_616718887_eDoYgKCon6TL7ggKHSpqYI5XEkRPqV7y.jpg",
+    "https://t4.ftcdn.net/jpg/06/24/96/51/240_F_624965150_FRwAUNCDnDLxrX87am6hDQip2QNoKx2A.jpg",
+    "https://t3.ftcdn.net/jpg/06/21/88/34/240_F_621883464_mZCmCAqaBgcV3bLwoaKx3eyrB4gjJ02M.jpg",
+    "https://t4.ftcdn.net/jpg/06/22/23/65/240_F_622236596_41vDy4OkN5dIsd8Mkic0jYwgcQJPkG5R.jpg",
+    "https://t3.ftcdn.net/jpg/06/16/71/88/240_F_616718887_eDoYgKCon6TL7ggKHSpqYI5XEkRPqV7y.jpg",
+    "https://t4.ftcdn.net/jpg/06/24/96/51/240_F_624965150_FRwAUNCDnDLxrX87am6hDQip2QNoKx2A.jpg",
+  ];
 
-    return (
-        <>
-            <Container>
-                {/* First*/}
-                <Grid container style={{
-                    padding: "10px"
-                }}>
-                    <Grid item xs={6} style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "start",
-                        flexDirection: "column", // Align items in a column
-                    }}>
-                        <div style={{ textAlign: "center" }}>
-                            <Typography variant='h3'>
-                                Effortless Shopping
-                            </Typography>
-                        </div>
-                        <Typography variant='body1'>
-                            Shop for your favorite styles with ease and convenience. Experience a seamless journey from browsing to checkout, making fashion accessible and enjoyable like never before.
-                        </Typography>
-                        <Button onClick={() => {
-                            navigate('/login')
-                        }} variant='contained'>Get started</Button>
-                    </Grid>
-                    <Grid item xs={6} style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>
-                        <img src={first} width={"50%"} alt="First" />
-                    </Grid>
-                </Grid>
-                {/* Second*/}
-                <Grid container style={{
-                    padding: "10px"
-                }}>
-                    <Grid item xs={6} style={{
-                        display: "flex",
-                        justifyContent: "start",
-                        alignItems: "start"
-                    }}>
-                        <img src={second} width={"50%"} alt="First" />
-                    </Grid>
-                    <Grid item xs={6} style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "start",
-                        flexDirection: "column", // Align items in a column
-                    }}>
-                        <div style={{ textAlign: "center" }}>
-                            <Typography variant='h3'>
-                                Fashion at Your Fingertips
-                            </Typography>
-                        </div>
-                        <Typography variant='body1'>
-                            Access the latest trends from your mobile or desktop. Our user-friendly app brings the world of fashion to your screen, offering a world of choices for your unique style.                        </Typography>
-                    </Grid>
-                </Grid>
-                {/* Third*/}
-                <Grid container style={{
-                    padding: "10px"
-                }}>
-                    <Grid item xs={6} style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "start",
-                        flexDirection: "column", // Align items in a column
-                    }}>
-                        <div style={{ textAlign: "center" }}>
-                            <Typography variant='h3'>
-                                Sustainable Style, Superior Quality
-                            </Typography>
-                        </div>
-                        <Typography variant='body1'>
-                            Discover eco-friendly fashion without compromising on quality. Our curated selection of sustainable clothing ensures you can look great while making a positive impact on the planet.                        </Typography>
-                        <Button onClick={() => {
-                            navigate('/login')
-                        }} variant='contained'>Signup for free</Button>
-                    </Grid>
-                    <Grid item xs={6} style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>
-                        <img src={third} width={"50%"} alt="First" />
-                    </Grid>
-                </Grid>
-                {/* Fourth*/}
-                <Grid container style={{
-                    padding: "10px"
-                }}>
-                    <Grid item xs={6} style={{
-                        display: "flex",
-                        justifyContent: "start",
-                        alignItems: "start"
-                    }}>
-                        <img src={fifth} width={"50%"} alt="First" />
-                    </Grid>
-                    <Grid item xs={6} style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "start",
-                        flexDirection: "column", // Align items in a column
-                    }}>
-                        <div style={{ textAlign: "center" }}>
-                            <Typography variant='h3'>
-                                Unleash Your Inner Fashionista
-                            </Typography>
-                        </div>
-                        <Typography variant='body1'>
-                            Express your unique style with our diverse collection. From classic to cutting-edge, we have the perfect outfit to help you stand out in every crowd.                        </Typography>
-                    </Grid>
-                </Grid>
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+  };
 
-                {/* Fifth*/}
-                <Grid container style={{
-                    padding: "10px"
-                }}>
-                    <Grid item xs={6} style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "start",
-                        flexDirection: "column", // Align items in a column
-                    }}>
-                        <div style={{ textAlign: "center" }}>
-                            <Typography variant='h3'>
-                                Seamless Checkout Experience
-                            </Typography>
-                        </div>
-                        <Typography variant='body1'>
-                            Buy with confidence through our user-friendly checkout process. We've streamlined the purchase journey to make sure you have a stress-free shopping experience, every time. </Typography>
+  return (
+    <>
+      {/* Hero Section */}
 
-                        <Button onClick={() => {
-                            navigate('/login')
-                        }} variant='contained'>Login for free</Button>
+      <Container>
+        <div
+          
+        >
+          <Slider {...settings}>
+            {images.map((image, index) => (
+              <div key={index}>
+                <img
+                  src={image}
+                  alt={`carousel-${index}`}
+                  style={{ width: "100%" }}
+                />
+              </div>
+            ))}
+          </Slider>
+        </div>
+
+      {/*Trending products */}
+      <Typography variant="h3" style={{
+          marginTop: "40px",
+          marginBottom: "40px",
+        }}>
+        Trending 
+      </Typography>
+
+      <Grid container spacing={2}>
+        {
+            
+            images.map(item=>{
+                return (<>
+                <Grid item xs={12} md={4}>
+                    <ProductCard imageURL = {item} imagwWidth = "300px" imageHeight="400px"/>
                     </Grid>
-                    <Grid item xs={6} style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>
-                        <img src={sixth} width={"50%"} alt="First" />
+                </>)
+            })
+        }
+      
+    </Grid>
+
+     {/*Poppular products */}
+   
+   <div styles={{
+    marginTop : "50px"
+   }}>
+  <Typography variant="h3" style={{
+          marginTop: "40px",
+          marginBottom: "40px",
+        }} >
+        Popular 
+      </Typography>
+
+   </div >
+      <Grid  container spacing={2}>
+        {
+            
+            images.map(item=>{
+                return (<>
+                <Grid item xs={12} md={4}>
+                    <ProductCard imageURL = {item} imagwWidth = "300px" imageHeight="500px"/>
                     </Grid>
-                </Grid>
+                </>)
+            })
+        }
+      
+    </Grid>
+
+    
+
+        </Container>
 
 
-
-            </Container>
-        </>
-    );
+    </>
+  );
 }
 
 export default DesktopLandingPage;
